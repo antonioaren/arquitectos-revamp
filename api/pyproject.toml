@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "arquitectos"
+version = "0.1.0"
+description = ""
+authors = ["pedro <antonioaren2@gmail.com>"]
+license = "Proprietary"
+
+packages = [
+    {include = "arquitectos"},
+]
+
+[tool.poetry.dependencies]
+python = "~3.10"
+modelw-preset-django = {extras = ["celery", "channels", "wagtail"], version = "~2023.3.0"}
+drf-spectacular = {extras = ["sidecar"], version = "^0.26.1"}
+gdal = "^3.6.4"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+isort = "*"
+ipython = "*"
+
+[tool.isort]
+profile = "black"
+known_first_party = "arquitectos"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
