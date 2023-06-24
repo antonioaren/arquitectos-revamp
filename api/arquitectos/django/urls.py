@@ -23,7 +23,7 @@ router.register("me", MeViewSet, basename="me")
 urlpatterns = [
     path("back/admin/", admin.site.urls),
     path("back/api/", include(router.urls)),
-    path("wubba-lubba-dub-dub/", include(wagtailadmin_urls)),
+    path("_/admin/cms/", include(wagtailadmin_urls)),
     path("back/documents/", include(wagtaildocs_urls)),
     path("", include(wagtail_urls)),
 ]

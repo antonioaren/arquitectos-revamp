@@ -65,6 +65,32 @@ class CustomDocument(AbstractDocument):
         ]
 
 
+class CTAButtonDefault(models.Model):
+    label = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("Label"),
+        help_text=_("Label for the button"),
+    )
+
+    link = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("Link"),
+        help_text=_("Link for the button"),
+    )
+
+    page = models.ForeignKey(
+        "wagtailcore.Page",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=_("Page"),
+        help_text=_("Page to link to"),
+    )
+
+
 class HomePage(Page):
     """
     Home page, expected to be the root of the website. There is already a
@@ -73,6 +99,10 @@ class HomePage(Page):
     """
 
     parent_page_types = ["wagtailcore.Page"]
+
+    class Meta:
+        verbose_name = _("Home Page")
+        verbose_name_plural = _("Home Pages")
 
 
 class GalleryPage(Page):
@@ -88,6 +118,10 @@ class GalleryPage(Page):
         if context["items"] is None:
             context["items"] = []
         return context
+
+    class Meta:
+        verbose_name = _("Gallery Page")
+        verbose_name_plural = _("Gallery Pages")
 
 
 class DetailsGalleryPage(Page):
@@ -123,3 +157,7 @@ class DetailsGalleryPage(Page):
         FieldPanel("caption"),
         FieldPanel("description"),
     ]
+
+    class Meta:
+        verbose_name = _("Details Gallery Page")
+        verbose_name_plural = _("Details Gallery Pages")

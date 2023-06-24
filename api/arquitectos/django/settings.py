@@ -24,8 +24,6 @@ def get_libs_location(package: str, lib_file: str) -> str:
     if lib_path:
         return str(Path(lib_path) / lib_file)
 
-
-
 def get_package_version() -> str:
     """
     Trying to get the current package version using the metadata module. This
@@ -37,7 +35,6 @@ def get_package_version() -> str:
         return metadata.version("arquitectos")
     except metadata.PackageNotFoundError:
         return "0.0.0"
-
 
 with EnvManager(ModelWDjango()) as env:
     # ---
