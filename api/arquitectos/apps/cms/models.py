@@ -1,5 +1,7 @@
 from django.db import models
+
 from django.utils.translation import gettext_lazy as _
+from wagtail.admin.panels import FieldPanel
 from wagtail.core.models import Page
 from wagtail.documents.models import AbstractDocument
 from wagtail.images.models import AbstractImage, AbstractRendition
@@ -71,3 +73,53 @@ class HomePage(Page):
     """
 
     parent_page_types = ["wagtailcore.Page"]
+
+
+class GalleryPage(Page):
+    """
+    Gallery page, expected to be a child of the home page. It's a simple page which contains a list of details images
+    with their description.
+    """
+    parent_page_types = ["Homepage"]
+
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context["items"] = DetailsGalleryPage.objects.live().public().all()
+        if context["items"] is None:
+            context["items"] = []
+        return context
+
+
+class DetailsGalleryPage(Page):
+    """
+    Details Gallery page, expected to be a child of the gallery page. It's a simple page which contains the details of
+    an image like caption, description and the image itself.
+    """
+
+    parent_page_types = ["GalleryPage"]
+
+    image = models.ForeignKey(
+        CustomImage,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="+",
+        verbose_name=_("Image"),
+    )
+
+    caption = models.CharField(
+        max_length=255,
+        blank=True,
+        verbose_name=_("Caption"),
+        help_text=_("Caption for the image at Gallery Page"))
+
+    description = models.TextField(
+        blank=True,
+        verbose_name=_("Description"),
+    )
+
+    content_panels = Page.content_panels + [
+        FieldPanel("image"),
+        FieldPanel("caption"),
+        FieldPanel("description"),
+    ]

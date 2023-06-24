@@ -9,12 +9,14 @@
 <script>
 import ServerTemplatedComponent from "~/components/ServerTemplatedComponent";
 import Title1 from "~/components/blocks/Title1";
+import Card from "~/components/blocks/cards-block/card.vue";
 
 /**
  * Put here all the components that you might want to render
  */
 const DEFS = {
     Title1,
+    Card,
 };
 
 /**

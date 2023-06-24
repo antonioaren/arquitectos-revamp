@@ -1,20 +1,29 @@
+from pathlib import Path
+import os
 from importlib import metadata
-
 from model_w.env_manager import EnvManager
 from model_w.preset.django import ModelWDjango
 
+DEBUG = None
 REST_FRAMEWORK = {}
+BASE_URL = None
+BASE_DIR = ""
 
+def get_libs_location(package: str, lib_file: str) -> str:
+    import shlex
+    import subprocess
 
-class CustomModelWDjango(ModelWDjango):
+    output = subprocess.run([f"{package}-config", "--libs"], capture_output=True)
+    parts = shlex.split(output.stdout.decode())
+    lib_path = None
 
-    def post_drf(self, context):
-        """
-        We're installing DRF
-        """
-        yield from self._install_app(context, "rest_framework", 80)
-        if self.enable_postgis:
-            yield from self._install_app(context, "rest_framework_gis", 80)
+    for part in parts:
+        if part.startswith("-L"):
+            lib_path = part[2:]
+
+    if lib_path:
+        return str(Path(lib_path) / lib_file)
+
 
 
 def get_package_version() -> str:
@@ -30,7 +39,7 @@ def get_package_version() -> str:
         return "0.0.0"
 
 
-with EnvManager(CustomModelWDjango()) as env:
+with EnvManager(ModelWDjango()) as env:
     # ---
     # Apps
     # ---
@@ -88,3 +97,13 @@ with EnvManager(CustomModelWDjango()) as env:
     WAGTAIL_SITE_NAME = "arquitectos"
     WAGTAILIMAGES_IMAGE_MODEL = "cms.CustomImage"
     WAGTAILDOCS_DOCUMENT_MODEL = "cms.CustomDocument"
+
+
+    # --- Fix legacy OSes ---
+    if env.get("OSX_IS_FANTASTIX", False, is_yaml=True):
+        GDAL_LIBRARY_PATH = env.get(
+            "GDAL_LIBRARY_PATH", get_libs_location("gdal", "libgdal.dylib")
+        )
+        GEOS_LIBRARY_PATH = env.get(
+            "GEOS_LIBRARY_PATH", get_libs_location("geos", "libgeos_c.dylib")
+        )

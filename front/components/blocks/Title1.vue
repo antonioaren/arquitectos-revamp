@@ -6,6 +6,6 @@ export default {
 
 <style lang="scss">
 h1 {
-    color: red;
+    color: blue;
 }
 </style>
