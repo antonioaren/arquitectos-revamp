@@ -1,11 +1,20 @@
 {% extends "base.html" %}
+{% load static %}
+{% load wagtailcore_tags %}
+{% load wagtailimages_tags %}
+{% load wagtailuserbar %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
-    <div>
-        {{ page.caption }}
-    </div>
-    <div>
-        {{ page.description }}
+    <div class="arc-details-page">
+        <h1>{{ page.title }}</h1>
+        <div>
+            {% image page.image fill-320x320 %}
+        </div>
+        <div>
+            {{ page.caption }}
+        </div>
+        <div>
+            {{ page.description }}
+        </div>
     </div>
 {% endblock %}
