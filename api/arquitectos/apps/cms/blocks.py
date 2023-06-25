@@ -1,7 +1,8 @@
 from django.utils.translation import gettext_lazy as _
+from wagtail.blocks import StreamBlock
 from wagtail.core import blocks
-from wagtail.core.blocks import StreamBlock
-from variables import AUTHOR_CHOICES
+from .variables import AUTHOR_CHOICES
+
 
 class HeaderSubcategoryBlock(blocks.StructBlock):
     title = blocks.CharBlock(label='Título', max_length=100)
@@ -21,11 +22,11 @@ class HeaderCategoryBlock(blocks.StructBlock):
     category_page = blocks.PageChooserBlock(label='Categoría')
     subcategories = StreamBlock(
         [("subcategory", HeaderSubcategoryBlock())],
-        block_counts={"anchors": {"min_num": 1, "max_num": 4}},
+        block_counts={"subcategory": {"min_num": 1, "max_num": 4}},
         label=_("sub-categoras"),
     )
 
     class Meta:
-        template = 'cms/blocks/header_category_block.html'
+        template = 'blocks/header_category_block.html'
         icon = 'fa fa-list'
         label = 'Cabecera de Categoría'

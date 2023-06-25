@@ -4,8 +4,11 @@ from django.utils.translation import gettext_lazy as _
 from wagtail.admin.panels import FieldPanel
 from wagtail.core.models import Page
 from wagtail.documents.models import AbstractDocument
+from wagtail.fields import StreamField
 from wagtail.images.models import AbstractImage, AbstractRendition
 from wagtail.images.models import Image as DefaultImage
+
+from arquitectos.apps.cms.blocks import HeaderCategoryBlock
 
 
 class CustomImage(AbstractImage):
@@ -100,14 +103,20 @@ class HomePage(Page):
 
     parent_page_types = ["wagtailcore.Page"]
 
-    blocks = block.StreamBlock(
+    blocks = StreamField(
         [
             ("category", HeaderCategoryBlock()),
         ],
-        block_counts={"anchors": {"min_num": 1, "max_num": 4}},
-        label=_("header"),
+        block_counts={"category": {"min_num": 1, "max_num": 4}},
+        verbose_name=_("Header menu"),
+        null=True,
+        blank=True,
+        use_json_field=True,
     )
 
+    content_panels = Page.content_panels + [
+        FieldPanel("blocks"),
+    ]
 
     class Meta:
         verbose_name = _("Home Page")
