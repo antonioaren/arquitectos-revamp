@@ -1,1 +1,15 @@
-{% load wagtailcore_tags %}
+{% extends "base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+<div>
+    {% for child in page.get_children.specific %}
+        <div>
+            <a href="{{ child.url }}">
+                {% image child.image fill-110x110 %}
+                <p>{{ child.title }}</p>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

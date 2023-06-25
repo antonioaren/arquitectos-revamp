@@ -19,7 +19,7 @@ function addForwardedHost(proxyReq, req) {
  * - When the request has the X-Reach-API header (aka the front-end is trying to
  *   directly reach the API)
  * - When the request is directed at /back
- * - When the request is directed at /wubba-lubba-dub-dub
+ * - When the request is directed at /_\/admin\/cms
  * - Unless it's a forbidden pattern (aka a Wagtail preview page, which we want
  *   to render on Nuxt side like a regular CMS page, even though it's within the
  *   admin)
@@ -35,16 +35,16 @@ function getFromApi(path, req) {
         return true;
     }
 
-    const prefixes = ["wubba-lubba-dub-dub", "back"].join("|");
+    const prefixes = ["_/admin/cms", "back"].join("|");
 
     if (!path.match(new RegExp(`^/(${prefixes})(/|$)`))) {
         return false;
     }
 
     const isPreviewEdit =
-        /^\/wubba-lubba-dub-dub\/pages\/[^/]+\/edit\/preview\/$/.test(path);
+        /^\/_\/admin\/cms\/pages\/[^/]+\/edit\/preview\/$/.test(path);
     const isPreviewAdd =
-        /^\/wubba-lubba-dub-dub\/pages\/add\/[^/]+\/[^/]+\/[^/]+\/preview\/$/.test(
+        /^\/_\/admin\/cms\/pages\/add\/[^/]+\/[^/]+\/[^/]+\/preview\/$/.test(
             path
         );
     const isPreview = isPreviewEdit || isPreviewAdd;
@@ -102,5 +102,11 @@ export default {
                 onProxyReq: addForwardedHost,
             },
         ],
+    ],
+
+    css: [
+        "@/assets/styles/global.scss",
+        "@/assets/styles/settings/settings.colors.scss",
+        "@/assets/styles/settings/settings.global.scss",
     ],
 };

@@ -100,6 +100,15 @@ class HomePage(Page):
 
     parent_page_types = ["wagtailcore.Page"]
 
+    blocks = block.StreamBlock(
+        [
+            ("category", HeaderCategoryBlock()),
+        ],
+        block_counts={"anchors": {"min_num": 1, "max_num": 4}},
+        label=_("header"),
+    )
+
+
     class Meta:
         verbose_name = _("Home Page")
         verbose_name_plural = _("Home Pages")

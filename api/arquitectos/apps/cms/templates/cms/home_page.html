@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ page.title }}</h1>
+    <section class="category">
+         {% for block in self.blocks %}
+            {% include_block block %}
+        {% endfor %}
+    </section>
 {% endblock %}
